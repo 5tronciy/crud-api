@@ -1,5 +1,5 @@
-import { IncomingMessage, ServerResponse } from 'http';
-import { getUsers, getUserById } from '../controllers/userController';
+import { IncomingMessage, ServerResponse } from 'node:http';
+import { getUsers, getUserById, createUser } from '../controllers/userController';
 
 export const handleUserRoutes = async (req: IncomingMessage, res: ServerResponse): Promise<boolean> => {
   const url = req.url || '';
@@ -7,6 +7,11 @@ export const handleUserRoutes = async (req: IncomingMessage, res: ServerResponse
   
   if (url === '/api/users' && method === 'GET') {
     await getUsers(req, res);
+    return true;
+  }
+  
+  if (url === '/api/users' && method === 'POST') {
+    await createUser(req, res);
     return true;
   }
   
