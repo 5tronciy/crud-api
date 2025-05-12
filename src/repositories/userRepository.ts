@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { User, CreateUserDto } from '../types';
+import { User, CreateUserDto, UpdateUserDto } from '../types';
 
 class UserRepository {
   private users: User[] = [];
@@ -19,6 +19,31 @@ class UserRepository {
     };
     this.users.push(newUser);
     return newUser;
+  }
+
+  public update(id: string, userData: UpdateUserDto): User | undefined {
+    const userIndex = this.users.findIndex(user => user.id === id);
+    if (userIndex === -1) {
+      return undefined;
+    }
+
+    const updatedUser = {
+      ...this.users[userIndex],
+      ...userData
+    };
+
+    this.users[userIndex] = updatedUser;
+    return updatedUser;
+  }
+
+  public delete(id: string): boolean {
+    const userIndex = this.users.findIndex(user => user.id === id);
+    if (userIndex === -1) {
+      return false;
+    }
+
+    this.users.splice(userIndex, 1);
+    return true;
   }
 }
 

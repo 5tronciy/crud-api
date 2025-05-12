@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { getUsers, getUserById, createUser } from '../controllers/userController';
+import { getUsers, getUserById, createUser, updateUser, deleteUser } from '../controllers/userController';
 
 export const handleUserRoutes = async (req: IncomingMessage, res: ServerResponse): Promise<boolean> => {
   const url = req.url || '';
@@ -16,10 +16,23 @@ export const handleUserRoutes = async (req: IncomingMessage, res: ServerResponse
   }
   
   const userIdMatch = url.match(/^\/api\/users\/([^\/]+)$/);
-  if (userIdMatch && method === 'GET') {
+  if (userIdMatch) {
     const userId = userIdMatch[1];
-    await getUserById(req, res, userId);
-    return true;
+    
+    if (method === 'GET') {
+      await getUserById(req, res, userId);
+      return true;
+    }
+    
+    if (method === 'PUT') {
+      await updateUser(req, res, userId);
+      return true;
+    }
+    
+    if (method === 'DELETE') {
+      await deleteUser(req, res, userId);
+      return true;
+    }
   }
   
   return false;
