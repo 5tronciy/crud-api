@@ -6,6 +6,7 @@
   "scripts": {
     "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "start:prod": "npm run build && node dist/server.js",
+    "start:multi": "npm run build && cross-env MULTI=true node dist/server.js",
     "build": "webpack --mode production"
   },
   "keywords": [
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/node": "^18.0.0",
     "@types/uuid": "^8.3.4",
+    "cross-env": "^7.0.3",
     "ts-node": "^10.8.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.7.4",
