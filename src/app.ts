@@ -3,37 +3,33 @@ import { handleUserRoutes } from './routes/userRoutes';
 import { handleServerError } from './middleware/errorHandler';
 
 const parseRequestBody = async (req: IncomingMessage): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    if (req.method === 'GET' || req.method === 'DELETE') {
-      return resolve({});
-    }
-    
+  if (req.method === 'GET' || req.method === 'DELETE') {
+    return {};
+  }
+  
+  if ((req as any).body) {
+    return (req as any).body;
+  }
+  
+  try {
     const bodyParts: Buffer[] = [];
     
-    req.on('data', (chunk: Buffer) => {
-      bodyParts.push(chunk);
-    });
+    for await (const chunk of req) {
+      bodyParts.push(Buffer.from(chunk));
+    }
     
-    req.on('end', () => {
-      const bodyBuffer = Buffer.concat(bodyParts);
-      const bodyString = bodyBuffer.toString();
-      
-      if (!bodyString) {
-        return resolve({});
-      }
-      
-      try {
-        const bodyObject = JSON.parse(bodyString);
-        resolve(bodyObject);
-      } catch (error) {
-        reject(new Error('Invalid JSON in request body'));
-      }
-    });
+    const bodyBuffer = Buffer.concat(bodyParts);
+    const bodyString = bodyBuffer.toString();
     
-    req.on('error', (error) => {
-      reject(error);
-    });
-  });
+    if (!bodyString) {
+      return {};
+    }
+    
+    return JSON.parse(bodyString);
+  } catch (error) {
+    console.error('Error parsing request body:', error);
+    throw new Error('Invalid JSON in request body');
+  }
 };
 
 export const createApp = (port: number) => {
