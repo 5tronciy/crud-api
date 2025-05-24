@@ -1,0 +1,49 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "Simple CRUD API using in-memory database",
+  "main": "dist/server.js",
+  "scripts": {
+    "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "start:prod": "npm run build && node dist/server.js",
+    "start:multi": "npm run build && cross-env MULTI=true node dist/server.js",
+    "build": "webpack --mode production",
+    "test": "jest"
+  },
+  "keywords": [
+    "nodejs",
+    "api",
+    "crud"
+  ],
+  "author": "Roman Golchuk <golchukroman@gmail.com> (https://www.roman-golchuk.site/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5tronciy/crud-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/5tronciy/crud-api/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.4",
+    "@types/node": "^18.0.0",
+    "@types/uuid": "^8.3.4",
+    "cross-env": "^7.0.3",
+    "jest": "^28.1.2",
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.8.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.7.4",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "ts-loader": "^9.3.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  }
+}
